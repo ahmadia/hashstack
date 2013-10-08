@@ -1,0 +1,12 @@
+extends:
+ - file: homebrew.yaml
+
+packages:
+  zlib:
+  szlib:
+  nose:
+  hdf5:
+  jinja2:
+  distribute:
+  python:
+    host: true

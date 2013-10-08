@@ -1,0 +1,12 @@
+extends:
+  - file: osx.yaml
+
+parameters:
+  python_host_packages: '/usr/local/lib/python2.7/site-packages'
+  HOST_MPICC: /usr/local/bin/mpicc
+  HOST_MPICXX: /usr/local/bin/mpic++
+  HOST_MPIF77: /usr/local/bin/mpif77
+  HOST_MPIF90: /usr/local/bin/mpif90
+  HOST_MPIEXEC: /usr/local/bin/mpiexec
+  HOST_CMAKE: /usr/local/bin/cmake
+  HOST_PYTHON: /usr/local/bin/python

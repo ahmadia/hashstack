@@ -1,7 +1,7 @@
 from hashdist import build_stage
 
 def rpath_flag(ctx, path):
-   if ctx.parameters['platform'] == 'linux':
+    if ctx.parameters['platform'] in ['linux', 'Darwin']:
        return '-Wl,-rpath=%s' % path
 
 @build_stage()
