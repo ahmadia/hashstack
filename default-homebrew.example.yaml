@@ -9,4 +9,4 @@ packages:
   jinja2:
   distribute:
   python:
-    host: true
+    host: false

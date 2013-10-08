@@ -2,6 +2,8 @@ extends:
   - file: osx.yaml
 
 parameters:
+  PATH: /usr/local/bin:/usr/bin:/bin
+  use_python_host_packages: false
   python_host_packages: '/usr/local/lib/python2.7/site-packages'
   HOST_MPICC: /usr/local/bin/mpicc
   HOST_MPICXX: /usr/local/bin/mpic++
