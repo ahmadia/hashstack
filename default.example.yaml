@@ -5,7 +5,7 @@ packages:
   zlib:
   szlib:
   python:
-    use: host-python
+    host: true
   
   # numpy/scipy has some problems from modern Ubuntu; we'll add an OpenBLAS build shortly,
   # the lines below work for older Ubuntu:
