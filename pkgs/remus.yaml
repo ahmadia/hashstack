@@ -1,0 +1,21 @@
+extends: [cmake_package]
+dependencies:
+  build: [boost, zmq]
+
+sources:
+- url: https://github.com/robertmaynard/Remus/releases/download/v0.1.2-fullsource/remus-v0.1.2-source.tar.gz
+  key: tar.gz:kr5dfsjdrd2rpz4jvwt5knkws5jzybzw
+
+build_stages:
+- name: configure
+  mode: override
+  extra: ['-DBUILD_SHARED_LIBS:BOOL=ON',
+          '-DCMAKE_BUILD_TYPE:STRING=Release',
+          '-DRemus_ENABLE_EXAMPLES:BOOL=OFF',
+          '-DRemus_ENABLE_TESTING:BOOL=OFF',
+          '-DRemus_NO_SYSTEM_BOOST:BOOL=ON',
+          '-DZeroMQ_ROOT_DIR=${ZMQ_DIR}',
+          '-DZeroMQ_INCLUDE_DIR=${ZMQ_DIR}/include',
+          '-DZeroMQ_LIBRARY_DIR=${ZMQ_DIR}/lib',
+          '-DBOOST_ROOT=${BOOST_DIR}',
+          '-DBOOST_LIBRARYDIR=${BOOST_DIR}/lib']
