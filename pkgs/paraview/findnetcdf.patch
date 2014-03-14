@@ -1,0 +1,48 @@
+--- a/VTK/CMake/FindNetCDF.cmake
++++ b/VTK/CMake/FindNetCDF.cmake
+@@ -38,13 +38,22 @@ if (NETCDF_INCLUDE_DIR AND NETCDF_LIBRARY)
+   set (NETCDF_FIND_QUIETLY TRUE)
+ endif ()
+
++set(USE_DEFAULT_PATHS "NO_DEFAULT_PATH")
++if(NETCDF_USE_DEFAULT_PATHS)
++  set(USE_DEFAULT_PATHS "")
++endif()
++
++message(STATUS "NETCDF_DIR: ${NETCDF_DIR}")
++
+ find_path (NETCDF_INCLUDE_DIR netcdf.h
+-  HINTS NETCDF_DIR ENV NETCDF_DIR)
++  HINTS "${NETCDF_DIR}/include")
+ mark_as_advanced (NETCDF_INCLUDE_DIR)
+ set (NETCDF_C_INCLUDE_DIRS ${NETCDF_INCLUDE_DIR})
+
+-find_library (NETCDF_LIBRARY NAMES netcdf)
++find_library (NETCDF_LIBRARY NAMES netcdf
++  HINTS "${NETCDF_DIR}/lib")
+ mark_as_advanced (NETCDF_LIBRARY)
++
+ set (NETCDF_C_LIBRARIES ${NETCDF_LIBRARY})
+
+ #start finding requested language components
+@@ -54,11 +63,18 @@ set (NETCDF_HAS_INTERFACES "YES") # will be set to NO if we're missing any inter
+
+ macro (NetCDF_check_interface lang header libs)
+   if (NETCDF_${lang})
++    message(STATUS "NETCDF_${lang}_ROOT: ${NETCDF_${lang}_ROOT}")
+     #search starting from user modifiable cache var
+     find_path (NETCDF_${lang}_INCLUDE_DIR NAMES ${header}
+-      HINTS "${NETCDF_INCLUDE_DIR}" NO_DEFAULT_PATH)
++      HINTS "${NETCDF_INCLUDE_DIR}"
++      HINTS "${NETCDF_${lang}_ROOT}/include"
++      ${USE_DEFAULT_PATHS})
++
+     find_library (NETCDF_${lang}_LIBRARY NAMES ${libs}
+-      HINTS "${NetCDF_lib_dirs}" NO_DEFAULT_PATH)
++      HINTS "${NetCDF_lib_dirs}"
++      HINTS "${NETCDF_${lang}_ROOT}/lib"
++      ${USE_DEFAULT_PATHS})
++
+     mark_as_advanced (NETCDF_${lang}_INCLUDE_DIR NETCDF_${lang}_LIBRARY)
+
+     #export to internal varS that rest of project can use directly

@@ -1,15 +1,24 @@
 extends: [cmake_package]
 dependencies:
-  build: [boost, png, qt, zlib, hdf5, mpi, netcdf4, netcdf4cpp]
+  build: [boost, png, qt, zlib, gdal, hdf5, mpi, netcdf4, netcdf4cpp]
   #extra build deps to enable as we go: gdal, numpy, python, ffmpeg, hdf5, libxml3, matplotlib
 sources:
 - url: http://www.paraview.org/files/v4.1/ParaView-v4.1.0-source.tar.gz
   key: tar.gz:qdxytdavrv75ttvqxtmdxypwphxpa3he
 
 build_stages:
+- name: patch
+  before: configure
+  files: [findnetcdf.patch]
+  handler: bash
+  bash: |
+    patch -up1 < _hashdist/findnetcdf.patch
+
 - name: configure
   mode: override
-  extra: ['-DBUILD_SHARED_LIBS:BOOL=ON',
+  extra: [
+  #manually setup
+          '-DBUILD_SHARED_LIBS:BOOL=ON',
           '-DCMAKE_BUILD_TYPE:STRING=Release',
           '-DBUILD_TESTING:BOOL=OFF',
           '-DPARAVIEW_BUILD_WEB_DOCUMENTATION:BOOL=OFF',
@@ -23,21 +32,36 @@ build_stages:
           '-DPARAVIEW_ENABLE_PYTHON:BOOL=ON',
           '-DPARAVIEW_USE_MPI:BOOL=ON',
           '-DPARAVIEW_USE_VISITBRIDGE:BOOL=ON',
+          '-DVTK_USE_SYSTEM_ZLIB:BOOL=ON',
+          '-DVTK_USE_SYSTEM_PNG:BOOL=ON',
+          '-DVTK_USE_SYSTEM_FREETYPE:BOOL=ON',
+          '-DVTK_USE_SYSTEM_LIBXML2:BOOL=ON',
           '-DVTK_USE_SYSTEM_HDF5:BOOL=ON',
           '-DVTK_USE_SYSTEM_NETCDF:BOOL=ON',
-          # '-DNETCDF_HAS_INTERFACES:BOOL=ON',
-          # '-DNETCDF_INCLUDE_DIR=${NETCDF4_DIR}/include',
-          # '-DNETCDF_CXX_INCLUDE_DIR=${NETCDF4CPP_DIR}/include',
+
+          #Setup the hashdist built dependencies
+          '-DZLIB_INCLUDE_DIR="${ZLIB_DIR}/include"',
+          '-DPNG_INCLUDE_DIR="${PNG_DIR}/include"',
+          '-DFREETYPE_INCLUDE_DIR="${FREETYPE_DIR}/include"',
+          '-DLIBXML2_INCLUDE_DIR="${LIBXML2_DIR}/include"',
+
+          #manualy setup the include and lib hints for netcdfcpp so we
+          #find the c++ bindings correctly, this overrides implementation
+          #detail variables to work properly
+          '-DNETCDF_USE_DEFAULT_PATHS=TRUE',
+          '-DNETCDF_DIR="${NETCDF4_DIR}"',
+          '-DNETCDF_CXX_ROOT="${NETCDF4CPP_DIR}"',
           #Disable the SciberQuestPlugin support for cuda. If we are building on
           #a machine with cuda installed, but needs to manually set the proper
           #backend compiler (aka every linux and mac machine) this fails
           '-DSQTK_CUDA:BOOL=OFF',
-          #CMB needs geovis enabled to provide the kml and gdal readers
+
+          #We want geovis enabled to provide the gdal reader
           '-DModule_vtkGeovisCore:BOOL=ON',
           '-DModule_vtkIOGDAL:BOOL=ON',
           '-DModule_vtkViewsInfovis:BOOL=ON',
-          #'-DGDAL_DIR:PATH=<INSTALL_DIR>',
-          #CMB needs to specify external plugins so that we can let paraview properly
+
+          #We need to specify external plugins so that we can let paraview properly
           #install the plugins. So we sneakily force a variable that is an
           #implementation detail of paraview branding
           '-DBPC_OPTIONAL_PLUGINS:INTERNAL={{optional_plugins}}'
