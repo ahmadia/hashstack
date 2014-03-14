@@ -21,14 +21,20 @@ parameters:
 # profile.
 
 packages:
+  #blas and lapack are required by numpy
+  blas:
+    use: host-osx-framework-accelerate
+  lapack:
+    use: host-osx-framework-accelerate
   cmake:
     use: host-cmake
   mpi:
     use: host-mpi
-  zlib:
-  szip:
-  png:
+
   libxml2:
+  png:
+  szip:
+  zlib:
   boost:
     toolset: clang
     address_model: 64
@@ -36,23 +42,26 @@ packages:
   #file format packages
   hdf5:
   netcdf4:
+  netcdf4cpp:
 
   #now the rest
-  zmq:
+  freetype:
+  gdal:
+  kml:
+  matplotlib:
+  molequeue:
+  numpy:
+  python:
+  qt:
+    toolset: unsupported/macx-clang
+    arch: x86_64
   remus:
-  # cmb
-  # ffmpeg
-  # fontconfig
-  # freetype
-  # gdal
-  # kml
-  # matplotlib
-  # molequeue
-  # netcdf4
-  # netcdf4cpp
-  # numpy
+  shiboken:
+  smtk:
+  vxl:
+  zmq:
   # paraview
-  # qt
-  # shiboken
-  # smtk
-  # vxl
+  # cmb
+
+  #not worth the time to enable
+  #ffmpeg:
