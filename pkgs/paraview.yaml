@@ -10,6 +10,7 @@ build_stages:
 - name: configure
   mode: override
   extra: ['-DBUILD_SHARED_LIBS:BOOL=ON',
+          '-DCMAKE_BUILD_TYPE:STRING=Release',
           '-DBUILD_TESTING:BOOL=OFF',
           '-DPARAVIEW_BUILD_WEB_DOCUMENTATION:BOOL=OFF',
           '-DPARAVIEW_INSTALL_DEVELOPMENT_FILES:BOOL=OFF',
@@ -24,6 +25,9 @@ build_stages:
           '-DPARAVIEW_USE_VISITBRIDGE:BOOL=ON',
           '-DVTK_USE_SYSTEM_HDF5:BOOL=ON',
           '-DVTK_USE_SYSTEM_NETCDF:BOOL=ON',
+          # '-DNETCDF_HAS_INTERFACES:BOOL=ON',
+          # '-DNETCDF_INCLUDE_DIR=${NETCDF4_DIR}/include',
+          # '-DNETCDF_CXX_INCLUDE_DIR=${NETCDF4CPP_DIR}/include',
           #Disable the SciberQuestPlugin support for cuda. If we are building on
           #a machine with cuda installed, but needs to manually set the proper
           #backend compiler (aka every linux and mac machine) this fails
@@ -39,3 +43,8 @@ build_stages:
           '-DBPC_OPTIONAL_PLUGINS:INTERNAL={{optional_plugins}}'
           ]
 
+
+# '-DZeroMQ_INCLUDE_DIR=${ZMQ_DIR}/include',
+#           '-DZeroMQ_LIBRARY_DIR=${ZMQ_DIR}/lib',
+#           '-DBOOST_ROOT=${BOOST_DIR}',
+#           '-DBOOST_LIBRARYDIR=${BOOST_DIR}/lib']
