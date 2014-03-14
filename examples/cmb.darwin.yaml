@@ -60,7 +60,7 @@ packages:
   smtk:
   vxl:
   zmq:
-  # paraview
+  paraview:
   # cmb
 
   #not worth the time to enable
