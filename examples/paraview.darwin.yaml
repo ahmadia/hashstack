@@ -52,3 +52,4 @@ packages:
   qt:
     toolset: unsupported/macx-clang
     arch: x86_64
+  paraview:
